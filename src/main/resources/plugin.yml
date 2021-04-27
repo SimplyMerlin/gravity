@@ -1,0 +1,5 @@
+name: Gravity
+version: ${project.version}
+main: net.beetonia.minigame.gravity.Gravity
+api-version: 1.16
+authors: [ SimplyMerlin ]
