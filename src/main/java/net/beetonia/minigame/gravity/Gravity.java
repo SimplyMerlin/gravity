@@ -1,6 +1,11 @@
 package net.beetonia.minigame.gravity;
 
 import co.aikar.commands.PaperCommandManager;
+import com.mongodb.ConnectionString;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import net.beetonia.minigame.gravity.command.FreezePhaseCommand;
 import net.beetonia.minigame.gravity.command.SkipPhaseCommand;
 import net.beetonia.minigame.gravity.events.GlobalEvents;
@@ -11,20 +16,29 @@ import net.beetonia.minigame.gravity.phase.CountdownPhase;
 import net.beetonia.minigame.gravity.phase.GameplayPhase;
 import net.beetonia.minigame.gravity.phase.PregamePhase;
 import net.beetonia.minigame.gravity.state.ScheduledStateSeries;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
+
 public final class Gravity extends JavaPlugin {
+
+    private static Gravity instance;
 
     PaperCommandManager paperCommandManager;
     ScheduledStateSeries mainState;
     MapSeries currentMapSeries;
     World arenaWorld;
     PlayerManager playerManager;
+    MongoDatabase mongoDatabase;
+
+    private static MongoCollection<Document> playerDataCollection;
 
     @Override
     public void onEnable() {
+        instance = this;
         arenaWorld = Bukkit.getWorld("dropper");
         Bukkit.getWorld("dropper").setAutoSave(false);
         MapSeries mapSeries = new MapSeries();
@@ -34,9 +48,18 @@ public final class Gravity extends JavaPlugin {
         }
         setCurrentMapSeries(mapSeries);
 
+        saveDefaultConfig();
+        initializeDatabase();
         initializeStates();
         registerCommands();
         getServer().getPluginManager().registerEvents(new GlobalEvents(), this);
+    }
+
+    private void initializeDatabase() {
+        ConnectionString connectionString = new ConnectionString(getConfig().getString("mongodb.uri"));
+        MongoClient mongoClient = MongoClients.create(connectionString);
+        mongoDatabase = mongoClient.getDatabase(getConfig().getString("mongodb.database"));
+        playerDataCollection = mongoDatabase.getCollection("playerdata");
     }
 
     @Override
@@ -69,5 +92,13 @@ public final class Gravity extends JavaPlugin {
 
     public World getArenaWorld() {
         return arenaWorld;
+    }
+
+    public static MongoCollection<Document> getPlayerDataCollection() {
+        return playerDataCollection;
+    }
+
+    public static Gravity getInstance() {
+        return instance;
     }
 }

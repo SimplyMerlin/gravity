@@ -41,7 +41,7 @@ public class PregamePhase extends GameState {
 
     @Override
     protected void onStart() {
-        scoreboard = new Assemble(plugin, new PregameBoard());
+        scoreboard = new Assemble(plugin, new PregameBoard(playerManager));
         scoreboard.setTicks(20);
         scoreboard.setAssembleStyle(AssembleStyle.MODERN);
     }

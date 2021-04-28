@@ -16,9 +16,7 @@ public class PlayerManager {
     }
 
     public void removePlayer(Player player) {
-        players.forEach(gamePlayer -> {
-            if (gamePlayer.getPlayer() == player) players.remove(gamePlayer);
-        });
+        players.removeIf(gamePlayer -> gamePlayer.getPlayer() == player);
     }
 
     public List<GamePlayer> sort() {

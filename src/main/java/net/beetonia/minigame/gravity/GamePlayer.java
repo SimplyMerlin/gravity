@@ -8,6 +8,8 @@ public class GamePlayer {
 
     Player player;
 
+    PlayerData playerData;
+
     Instant finished = null;
     int level = 0;
     boolean online = true;
@@ -15,10 +17,15 @@ public class GamePlayer {
 
     public GamePlayer(Player player) {
         this.player = player;
+        this.playerData = new PlayerData(player.getUniqueId());
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
     }
 
     public int getLevel() {
