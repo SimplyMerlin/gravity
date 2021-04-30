@@ -17,7 +17,7 @@ public class GamePlayer {
 
     public GamePlayer(Player player) {
         this.player = player;
-        this.playerData = new PlayerData(player.getUniqueId());
+        this.playerData = new PlayerData(this);
     }
 
     public Player getPlayer() {
@@ -54,6 +54,7 @@ public class GamePlayer {
 
     public void addFail() {
         fails++;
+        playerData.totalFails++;
     }
 
     public void increaseLevel() {

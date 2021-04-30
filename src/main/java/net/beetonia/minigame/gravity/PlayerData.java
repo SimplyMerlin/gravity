@@ -2,13 +2,17 @@ package net.beetonia.minigame.gravity;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 
+import javax.swing.plaf.basic.BasicToolBarUI;
 import java.util.UUID;
 
 public class PlayerData {
 
+    GamePlayer gamePlayer;
     UUID uuid;
     MongoCollection<Document> collection;
 
@@ -21,8 +25,9 @@ public class PlayerData {
     public int hardcoreVictories = 0;
     public int hardcorePoints = 0;
 
-    public PlayerData(UUID uuid) {
-        this.uuid = uuid;
+    public PlayerData(GamePlayer gamePlayer) {
+        this.uuid = gamePlayer.getPlayer().getUniqueId();
+        this.gamePlayer = gamePlayer;
         this.collection = Gravity.getPlayerDataCollection();
         Bukkit.getServer().getScheduler().runTaskAsynchronously(Gravity.getInstance(), this::initializeData);
     }
@@ -32,14 +37,7 @@ public class PlayerData {
         Document found = (Document) collection.find(playerdoc).first();
         if (found == null) {
             System.out.println("New player, " + uuid);
-            playerdoc.append("points", points);
-            playerdoc.append("gamesPlayed", gamesPlayed);
-            playerdoc.append("victories", victories);
-            playerdoc.append("winStreak", winStreak);
-            playerdoc.append("totalFails", totalFails);
-
-            playerdoc.append("hardcoreVictories", hardcoreVictories);
-            playerdoc.append("hardcorePoints", hardcorePoints);
+            generatePlayerDataDocument(playerdoc);
 
             collection.insertOne(playerdoc);
             System.out.println("Finished initializing new player " + uuid);
@@ -52,6 +50,25 @@ public class PlayerData {
             hardcoreVictories = found.getInteger("hardcoreVictories");
             hardcorePoints = found.getInteger("hardcorePoints");
         }
+    }
+
+    private void saveData() {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(Gravity.getInstance(), () -> {
+            Document document = new Document("UUID", uuid.toString());
+            generatePlayerDataDocument(document);
+            collection.updateOne(Filters.eq("UUID", uuid.toString()), document);
+        });
+    }
+
+    private void generatePlayerDataDocument(Document document) {
+        document.append("points", points);
+        document.append("gamesPlayed", gamesPlayed);
+        document.append("victories", victories);
+        document.append("winStreak", winStreak);
+        document.append("totalFails", totalFails);
+
+        document.append("hardcoreVictories", hardcoreVictories);
+        document.append("hardcorePoints", hardcorePoints);
     }
 
 }
