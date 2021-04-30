@@ -21,12 +21,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
-
 public final class Gravity extends JavaPlugin {
 
     private static Gravity instance;
-
+    private static MongoCollection<Document> playerDataCollection;
     PaperCommandManager paperCommandManager;
     ScheduledStateSeries mainState;
     MapSeries currentMapSeries;
@@ -34,7 +32,13 @@ public final class Gravity extends JavaPlugin {
     PlayerManager playerManager;
     MongoDatabase mongoDatabase;
 
-    private static MongoCollection<Document> playerDataCollection;
+    public static MongoCollection<Document> getPlayerDataCollection() {
+        return playerDataCollection;
+    }
+
+    public static Gravity getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -92,13 +96,5 @@ public final class Gravity extends JavaPlugin {
 
     public World getArenaWorld() {
         return arenaWorld;
-    }
-
-    public static MongoCollection<Document> getPlayerDataCollection() {
-        return playerDataCollection;
-    }
-
-    public static Gravity getInstance() {
-        return instance;
     }
 }

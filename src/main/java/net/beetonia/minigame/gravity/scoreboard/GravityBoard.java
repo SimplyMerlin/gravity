@@ -6,14 +6,11 @@ import net.beetonia.minigame.gravity.manager.PlayerManager;
 import net.beetonia.minigame.gravity.phase.GameplayPhase;
 import net.beetonia.minigame.gravity.util.Chat;
 import net.beetonia.minigame.gravity.util.TimeUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 
 public class GravityBoard implements AssembleAdapter {
@@ -40,24 +37,6 @@ public class GravityBoard implements AssembleAdapter {
         toReturn.add(TimeUtils.formatTimeMMSS(phase.getRemainingDuration().getSeconds()));
         toReturn.add("&b");
         toReturn.add("&b&lRanking");
-        //toReturn.add("&7&l#1 &fWaiting..");
-        /**
-        int i = 1;
-        for (UUID uuid : phase.getFinishers()) {
-            if (i > 5) continue;
-
-            toReturn.add("&a#" + i + " &9" + Bukkit.getPlayer(uuid).getName().substring(0, 9) + ". &f(" + TimeUtils.formatTimeMMSS(phase.getPlayerManager().getFinalTime(Bukkit.getPlayer(uuid)).getSeconds()) + ")");
-
-            i++;
-        }
-        for (Map.Entry<Integer, UUID> e : phase.getPositions().entrySet()) {
-            if (i > 5) continue;
-
-            toReturn.add("&a#" + i + " &9" + Bukkit.getPlayer(e.getValue()).getName());
-
-            i++;
-        }
-         **/
         int i = 1;
         for (GamePlayer gamePlayer : playerManager.getPlayers()) {
             if (i >= 5) break;

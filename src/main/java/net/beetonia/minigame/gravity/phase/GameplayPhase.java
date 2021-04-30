@@ -61,12 +61,7 @@ public class GameplayPhase extends GameState {
             player.getPlayer().setLevel((int) player.getPlayer().getLocation().getY());
         });
 
-        scheduleRepeating(new Runnable() {
-            @Override
-            public void run() {
-                playerManager.sort();
-            }
-        }, 0, 4);
+        scheduleRepeating(playerManager::sort, 0, 4);
 
     }
 
@@ -83,9 +78,9 @@ public class GameplayPhase extends GameState {
             int fail = player.getFails();
             StringBuilder sb = new StringBuilder();
             sb.append("&bPosition ");
-            sb.append("&e&l" + (playerManager.getPosition(player) + 1));
+            sb.append("&e&l").append(playerManager.getPosition(player) + 1);
             sb.append("&7/");
-            sb.append("&c" + allPlayers);
+            sb.append("&c").append(allPlayers);
             sb.append("&8 | ");
             for (int x = 0; x < gravity.getCurrentMapSeries().getMaps().size(); x++) {
                 if (x == player.getLevel()) sb.append(ChatColor.YELLOW);
@@ -130,7 +125,7 @@ public class GameplayPhase extends GameState {
         player.getPlayer().setVelocity(new Vector(0, 0, 0));
         player.getPlayer().setFallDistance(0);
         player.getPlayer().setHealth(20);
-        if (gravity.getCurrentMapSeries().getMaps().size()-1 <= player.getLevel()) {
+        if (gravity.getCurrentMapSeries().getMaps().size() - 1 <= player.getLevel()) {
             player.getPlayer().teleport(gravity.getCurrentMapSeries().getMap(0).getSpawnpoints().get(0));
         } else {
             player.getPlayer().teleport(gravity.getCurrentMapSeries().getMap(player.getLevel()).getSpawnpoints().get(0));
@@ -154,7 +149,7 @@ public class GameplayPhase extends GameState {
         GamePlayer gamePlayer = playerManager.getGamePlayer(player);
         e.getPlayer().setLevel((int) e.getTo().getY());
         if (e.getTo().getBlock().isLiquid()) {
-            if (gamePlayer.getLevel() >= gravity.getCurrentMapSeries().getMaps().size()-1) {
+            if (gamePlayer.getLevel() >= gravity.getCurrentMapSeries().getMaps().size() - 1) {
                 if (gamePlayer.getFinished() == null) {
                     playerWon(gamePlayer);
                     gamePlayer.increaseLevel();

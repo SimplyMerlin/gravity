@@ -36,6 +36,10 @@ public class GamePlayer {
         return finished;
     }
 
+    public void setFinished(Instant finished) {
+        this.finished = finished;
+    }
+
     public int getY() {
         return (int) player.getLocation().getY();
     }
@@ -59,9 +63,5 @@ public class GamePlayer {
 
     public void increaseLevel() {
         level++;
-    }
-
-    public void setFinished(Instant finished) {
-        this.finished = finished;
     }
 }
