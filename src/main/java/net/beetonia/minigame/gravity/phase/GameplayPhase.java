@@ -44,7 +44,7 @@ public class GameplayPhase extends GameState {
     protected void onEnd() {
         scoreboard.cleanup();
         System.out.println("Game ended, shut down the server.");
-        getPlayers().forEach(player -> player.kickPlayer("Server is restarting"));
+        getPlayers().forEach(player -> player.kickPlayer("&cServer is restarting!"));
         Bukkit.getServer().shutdown();
     }
 
