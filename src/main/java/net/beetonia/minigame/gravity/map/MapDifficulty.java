@@ -7,7 +7,7 @@ public enum MapDifficulty {
     EASY(ChatColor.GREEN, "Easy"),
     MEDIUM(ChatColor.YELLOW, "Medium"),
     HARD(ChatColor.RED, "Hard"),
-    INSANE(ChatColor.LIGHT_PURPLE, "Insane");
+    ELITE(ChatColor.LIGHT_PURPLE, "Elite");
 
     ChatColor color;
     String name;
